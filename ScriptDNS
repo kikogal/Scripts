@@ -1,0 +1,20 @@
+#!/bin/bash
+#Install DNS Service
+ssh -t root@192.168.144.40 << EOF
+echo "install DNS service" 
+apt-get install bind9
+apt-get install dnsutils
+EOF
+
+#Upload Config files as root
+scp scriptinversa root@192.168.144.40:/etc/bind/db.192
+scp scriptnamedconf root@192.168.144.40:/etc/bind/named.conf.local
+scp scriptzonapri root@192.168.144.40:/etc/bind/db.fgblegacy.org
+scp subzona root@192.168.144.40:/etc/bind/db.adm
+
+ssh -t root@192.168.144.40 << EOF
+echo "Restarting service"
+service bind9 restart
+EOF
+
+#endScript 
